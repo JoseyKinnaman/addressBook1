@@ -82,8 +82,12 @@ function showContact(contactId) {
   $(".first-name").html(contact.firstName);
   $(".last-name").html(contact.lastName);
   $(".phone-number").html(contact.phoneNumber);
-  $(".email").html(contact.email); 
-  $(".address").html(`<>`); 
+  $(".email").html(contact.email);
+  $(".address").empty(); 
+  contact.address.forEach(function(address){
+    $(".address").append(`<p><strong>${address.type} address: </strong>${address.street}, ${address.city}, ${address.zip}</p>`); 
+  })
+
   var buttons = $("#buttons");
   buttons.empty();
   buttons.append(
@@ -119,13 +123,19 @@ $(document).ready(function () {
     $("input#new-phone-number").val("");
     $("input#new-email").val("");
     $("input#street").val('');
-    var newAdress = new Address(inputtedStreet,  inputtedCity,  inputtedZip, inputtedType)
+    $("input#new-email").val('');
+    $("input#street").val('');
+    $("input#city").val('');
+    $("input#zip").val('');
+    $("input#type").val('');
+    var newAddress = new Address(inputtedStreet,  inputtedCity,  inputtedZip, inputtedType)
+    var newAddress2 = new Address('3030 Lolita dr',  'Pedrotown',  93495,'Home')
     var newContact = new Contact(
       inputtedFirstName,
       inputtedLastName,
       inputtedPhoneNumber,
       inputtedEmail,
-      newAddress
+      [newAddress,newAddress2]
     );
     addressBook.addContact(newContact);
     displayContactDetails(addressBook);
