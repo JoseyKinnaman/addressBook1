@@ -37,10 +37,11 @@ AddressBook.prototype.deleteContact = function (id) {
 };
 
 // Business Logic for Contacts ---------
-function Contact(firstName, lastName, phoneNumber) {
+function Contact(firstName, lastName, phoneNumber, email) {
   (this.firstName = firstName),
     (this.lastName = lastName),
-    (this.phoneNumber = phoneNumber);
+    (this.phoneNumber = phoneNumber),
+    (this.email = email);
 }
 
 Contact.prototype.fullName = function () {
@@ -97,13 +98,16 @@ $(document).ready(function () {
     var inputtedFirstName = $("input#new-first-name").val();
     var inputtedLastName = $("input#new-last-name").val();
     var inputtedPhoneNumber = $("input#new-phone-number").val();
-    $("input#new-first-name").val("");
+    var inputtedEmail = $("input#new-email").val();
+    $("input#new-first-name").val("");  
     $("input#new-last-name").val("");
     $("input#new-phone-number").val("");
+    $("input#new-email").val("");
     var newContact = new Contact(
       inputtedFirstName,
       inputtedLastName,
-      inputtedPhoneNumber
+      inputtedPhoneNumber,
+      inputtedEmail,
     );
     addressBook.addContact(newContact);
     displayContactDetails(addressBook);
