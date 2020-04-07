@@ -42,8 +42,8 @@ function Contact(firstName, lastName, phoneNumber, email, email2, address) {
     (this.lastName = lastName),
     (this.phoneNumber = phoneNumber),
     (this.email = email);
-    (this.email2 = email2);
-    (this.address = address);
+  (this.email2 = email2);
+  (this.address = address);
 }
 
 Contact.prototype.fullName = function () {
@@ -51,11 +51,11 @@ Contact.prototype.fullName = function () {
 };
 
 
-function Address(street,city,zip, type){
- this.street = street;
- this.city = city;
- this.zip = zip;
- this.type = type
+function Address(street, city, zip, type) {
+  this.street = street;
+  this.city = city;
+  this.zip = zip;
+  this.type = type
 }
 
 // User Interface Logic ---------
@@ -79,19 +79,19 @@ function displayContactDetails(addressBookToDisplay) {
 
 function showContact(contactId) {
   var contact = addressBook.findContact(contactId);
-  $("#show-contact").show();
+  $("#show-contact").fadeToggle();
   $(".first-name").html(contact.firstName);
   $(".last-name").html(contact.lastName);
   $(".phone-number").html(contact.phoneNumber);
-  $(".email").append(contact.email + ' ');
-  $(".email").append('<span id="email2>'+contact.email2+'</span>');
-  if (contact.email2 == undefined) {
-      $(".email").remove('#email2');
-    }
-  $(".address").empty(); 
-  contact.address.forEach(function(address){
-    if(address.street  && address.city && address.type && address.zip){
-    $(".address").append(`<p><strong>${address.type} address: </strong>${address.street}, ${address.city}, ${address.zip}</p>`); 
+  $(".email").html(contact.email + ' ' + contact.email2);
+  // $(".email").append( contact.email2 );
+  // if (contact.email2 === undefined) {
+  //   // $(".email").remove('#email2');
+  // }
+  $(".address").empty();
+  contact.address.forEach(function (address) {
+    if (address.street && address.city && address.type && address.zip) {
+      $(".address").append(`<p><strong>${address.type} address: </strong>${address.street}, ${address.city}, ${address.zip}</p>`);
     }
   })
 
@@ -103,6 +103,7 @@ function showContact(contactId) {
 }
 
 function attachContactListeners() {
+  var caw = new Audio('https://freesound.org/data/previews/361/361470_6512973-lq.mp3')
   $("ul#contacts").on("click", "li", function (event) {
     showContact(event.target.id);
   });
@@ -111,21 +112,40 @@ function attachContactListeners() {
     $("#show-contact").hide();
     displayContactDetails(addressBook);
   });
+  $('button').click(function () {
+    caw.play();
+  })
+}
+
+function clearInputs() {
+  $("input#new-first-name").val("");
+  $("input#new-last-name").val("");
+  $("input#new-phone-number").val("");
+  $("input#new-email").val("");
+  $("input#new-email2").val("");
+  for (var i = 1; i <= 3; i++) {
+    $(`input#street${i}`).val('');
+    $(`input#city${i}`).val('');
+    $(`input#zip${i}`).val('');
+    $(`input#type${i}`).val('');
+  }
 }
 
 $(document).ready(function () {
   attachContactListeners();
   $("form#new-contact").submit(function (event) {
     event.preventDefault();
+    $("#contact-form").fadeToggle();
+
     var inputtedFirstName = $("input#new-first-name").val();
     var inputtedLastName = $("input#new-last-name").val();
     var inputtedPhoneNumber = $("input#new-phone-number").val();
     var inputtedEmail = $("input#new-email").val();
     var inputtedEmail2 = $("input#new-email2").val();
-    var inputtedStreet = $("input#street").val();
-    var inputtedCity = $("input#city").val();
-    var inputtedZip = $("input#zip").val();
-    var inputtedType = $("input#type").val();
+    var inputtedStreet = $("input#street1").val();
+    var inputtedCity = $("input#city1").val();
+    var inputtedZip = $("input#zip1").val();
+    var inputtedType = $("input#type1").val();
     var inputtedStreet2 = $("input#street2").val();
     var inputtedCity2 = $("input#city2").val();
     var inputtedZip2 = $("input#zip2").val();
@@ -134,32 +154,15 @@ $(document).ready(function () {
     var inputtedCity3 = $("input#city3").val();
     var inputtedZip3 = $("input#zip3").val();
     var inputtedType3 = $("input#type3").val();
-    $("input#new-first-name").val("");  
-    $("input#new-last-name").val("");
-    $("input#new-phone-number").val("");
-    $("input#new-email").val("");
-    $("input#new-email2").val("");
-    $("input#street").val('');
-    $("input#city").val('');
-    $("input#zip").val('');
-    $("input#type").val('');
-    $("input#street2").val("");
-    $("input#city2").val("");
-    $("input#zip2").val("");
-    $("input#type2").val("");
-    $("input#street3").val("");
-    $("input#city3").val("");
-    $("input#zip3").val("");
-    $("input#type3").val("");
-   
+    clearInputs()
+
     var newAddress = new Address(
       inputtedStreet,
       inputtedCity,
       inputtedZip,
       inputtedType,
     );
-  
- 
+
     var newAddress2 = new Address(
       inputtedStreet2,
       inputtedCity2,
@@ -178,7 +181,7 @@ $(document).ready(function () {
       inputtedPhoneNumber,
       inputtedEmail,
       inputtedEmail2,
-      [newAddress,newAddress2, newAddress3]
+      [newAddress, newAddress2, newAddress3]
     );
     addressBook.addContact(newContact);
     displayContactDetails(addressBook);
